@@ -46,6 +46,13 @@ SEE_THROUGH = pygame.Surface((800, 180))
 SEE_THROUGH.set_alpha(150)
 SEE_THROUGH.fill((124, 118, 135))
 
+def key_down_handler(event):
+    global day, light_on
+    if event.key == pygame.K_l:
+        lights_on = not lights_on
+    elif event.key == pygame.K_d:
+        day = not day
+
 def draw_cloud(x, y):
     pygame.draw.ellipse(SEE_THROUGH, cloud_color, [x, y + 8, 10, 10])
     pygame.draw.ellipse(SEE_THROUGH, cloud_color, [x + 6, y + 4, 8, 8])
@@ -53,6 +60,19 @@ def draw_cloud(x, y):
     pygame.draw.ellipse(SEE_THROUGH, cloud_color, [x + 20, y + 8, 10, 10])
     pygame.draw.rect(SEE_THROUGH, cloud_color, [x + 6, y + 8, 18, 10])
 
+def draw_fence():
+    """ This function draws the fence with the certain sizes """
+    y = 170
+    for x in range(5, 800, 30):
+        pygame.draw.polygon(screen, NIGHT_GRAY, [[x + 2, y], [x + 2, y + 15], [x, y + 15], [x, y]])
+
+    y = 170
+    for x in range(5, 800, 3):
+        pygame.draw.line(screen, NIGHT_GRAY, [x, y], [x, y + 15], 1)
+
+    x = 0
+    for y in range(170, 185, 4):
+        pygame.draw.line(screen, NIGHT_GRAY, [x, y], [x + 800, y], 1)
 
 # Config
 lights_on = True
@@ -81,10 +101,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_l:
-                lights_on = not lights_on
-            elif event.key == pygame.K_d:
-                day = not day
+            key_down_handler(event)
 
     # Game logic (Check for collisions, update points, etc.)
     ''' leave this section alone for now ''' 
@@ -132,17 +149,7 @@ while not done:
 
 
     '''fence'''
-    y = 170
-    for x in range(5, 800, 30):
-        pygame.draw.polygon(screen, NIGHT_GRAY, [[x + 2, y], [x + 2, y + 15], [x, y + 15], [x, y]])
-
-    y = 170
-    for x in range(5, 800, 3):
-        pygame.draw.line(screen, NIGHT_GRAY, [x, y], [x, y + 15], 1)
-
-    x = 0
-    for y in range(170, 185, 4):
-        pygame.draw.line(screen, NIGHT_GRAY, [x, y], [x + 800, y], 1)
+    draw_fence()
 
     if day:
         pygame.draw.ellipse(screen, BRIGHT_YELLOW, [520, 50, 40, 40])
